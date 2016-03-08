@@ -1,0 +1,13 @@
+language: ruby
+
+rvm:
+  - 2.2
+
+script:
+  - gem install coveralls
+  - bundle exec rubocop
+  - rake test
+
+notifications:
+  on_success: false
+  on_failure: change
