@@ -1,5 +1,5 @@
 require 'xambassador/version'
 
-# Renegade module
+# Xambassador module
 module Xambassador
 end
