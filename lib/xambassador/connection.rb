@@ -1,3 +1,5 @@
+require 'octokit'
+
 module Xambassador
   # Connection helpers
   class Connection
