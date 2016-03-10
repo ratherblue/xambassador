@@ -7,11 +7,11 @@ require 'uri'
 module Xambassador
   # Pull Request helpers
   class CheckLabels
-    def initialize(pull_request, name, sha)
-      # connection.client.create_status(name, sha, 'pending',
-      #   context: 'Peer Review',
-      #   description: 'This needs work'
-      # )
+    def initialize(pull_request, name, sha, connection)
+      connection.client.create_status(name, sha, 'pending',
+        context: 'Peer Review',
+        description: 'This needs work'
+      )
       puts 'before get issues'
       labels = fetch_labels(pull_request['issue_url'])
       puts labels

@@ -26,7 +26,7 @@ module Xambassador
       name = pull_request['base']['repo']['full_name']
       sha = pull_request['head']['sha']
 
-      Xambassador::CheckLabels.new(pull_request, name, sha)
+      Xambassador::CheckLabels.new(pull_request, name, sha, @connection)
     end
   end
 end
