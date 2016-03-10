@@ -1,19 +1,15 @@
 module Xambassador
   # Status Check class
   class StatusCheck
-    def initialize(connection, pull_request)
+    def initialize(connection, pull_request, context)
       @name = pull_request['base']['repo']['full_name']
       @sha = pull_request['head']['sha']
+
       @connection = connection
-      @context = 'Default context'
+      @context = context
       @description_pending = 'Pending'
       @description_success = 'Success'
       @description_failure = 'Failure'
-
-      run(pull_request)
-    end
-
-    def run(pull_request)
     end
 
     def pending
@@ -21,6 +17,9 @@ module Xambassador
         context: @context,
         description: @description_pending
       }
+
+      puts 'pending'
+      puts 'context' + @context
 
       @connection.client.create_status(@name, @sha, 'pending', options)
     end
@@ -31,7 +30,22 @@ module Xambassador
         description: @description_success
       }
 
+      puts 'success'
+      puts 'context' + @context
+
       @connection.client.create_status(@name, @sha, 'success', options)
+    end
+
+    def failure
+      options = {
+        context: @context,
+        description: @description_failure
+      }
+
+      puts 'failure'
+      puts 'context' + @context
+
+      @connection.client.create_status(@name, @sha, 'failure', options)
     end
   end
 end
