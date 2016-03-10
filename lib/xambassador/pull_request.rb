@@ -15,7 +15,7 @@ module Xambassador
     def initialize(payload)
       action = payload['action']
 
-      if action == 'labeled'
+      if action == 'labeled' || action == 'unlabeled'
         handle_opened_pull_request(payload['pull_request'])
       elsif action == 'opened' ||
             action == 'synchronize' ||

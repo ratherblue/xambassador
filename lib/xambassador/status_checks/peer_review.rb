@@ -52,7 +52,7 @@ module Xambassador
       if count == 2
         success
       else
-        failure
+        pending
       end
     end
   end

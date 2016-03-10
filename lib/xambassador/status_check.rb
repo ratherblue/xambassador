@@ -7,6 +7,7 @@ module Xambassador
 
       @connection = connection
       @context = context
+
       @description_pending = 'Pending'
       @description_success = 'Success'
       @description_failure = 'Failure'
@@ -18,9 +19,6 @@ module Xambassador
         description: @description_pending
       }
 
-      puts 'pending'
-      puts 'context' + @context
-
       @connection.client.create_status(@name, @sha, 'pending', options)
     end
 
@@ -30,9 +28,6 @@ module Xambassador
         description: @description_success
       }
 
-      puts 'success'
-      puts 'context' + @context
-
       @connection.client.create_status(@name, @sha, 'success', options)
     end
 
@@ -41,9 +36,6 @@ module Xambassador
         context: @context,
         description: @description_failure
       }
-
-      puts 'failure'
-      puts 'context' + @context
 
       @connection.client.create_status(@name, @sha, 'failure', options)
     end
