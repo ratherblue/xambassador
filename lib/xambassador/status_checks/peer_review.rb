@@ -8,13 +8,9 @@ require_relative '../status_check'
 
 module Xambassador
   # Pull Request helpers
-  class CheckLabels < StatusCheck
+  class PeerReview < StatusCheck
     def run(pull_request)
-      labels = fetch_labels(pull_request['issue_url'])
-      puts 'running check'
-      puts labels
-
-      success
+      fetch_labels(pull_request['issue_url'])
     end
 
     def fetch_labels(url)
@@ -26,11 +22,11 @@ module Xambassador
       response = http.request(Net::HTTP::Get.new(url))
 
       body = JSON.parse(response.body)
-      body['labels']
+      check_labels(body['labels'])
     end
 
     def check_labels(labels)
-
+      
     end
   end
 end

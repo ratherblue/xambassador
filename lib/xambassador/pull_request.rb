@@ -5,7 +5,7 @@ require 'net/https'
 require 'uri'
 
 require_relative 'connection'
-require_relative 'status_checks/labels'
+require_relative 'status_checks/peer_review'
 
 module Xambassador
   # Pull Request helpers
@@ -23,7 +23,7 @@ module Xambassador
     def handle_opened_pull_request(pull_request)
       @connection = Xambassador::Connection.new
 
-      Xambassador::CheckLabels.new(@connection, pull_request)
+      Xambassador::PeerReview.new(@connection, pull_request)
     end
   end
 end
