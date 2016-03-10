@@ -7,18 +7,18 @@ require_relative '../status_check'
 module Xambassador
   # Check peer review status
   class PeerReview < StatusCheck
-    BACKEND_APPROVED = 'Backend Approved'.freeze
-    FRONTEND_APPROVED = 'Frontend Approved'.freeze
+    BACKEND_OK = 'backend approved'.freeze
+    FRONTEND_OK = 'frontend approved'.freeze
+    NEEDS_WORK = 'needs work'.freeze
 
     def initialize(connection, pull_request)
-      super(connection, pull_request, 'Peer Review asdfs')
+      super(connection, pull_request, 'Peer Review')
 
-      @description_pending = 'Pending'
+      @description_pending = "Labels '#{BACKEND_OK}' \
+        and '#{FRONTEND_OK}' are required"
       @description_success = 'Success'
-      @description_failure = "Labels '#{BACKEND_APPROVED}' \
-        and '#{FRONTEND_APPROVED}' are required"
+      @description_failure = 'Needs work'
 
-      pending
       fetch_labels(pull_request['issue_url'])
     end
 
@@ -37,19 +37,23 @@ module Xambassador
 
     def check_labels(labels)
       count = 0
+      needs_work = false
 
       labels.each do |label|
-        label_name = label['name']
-        if label_name == BACKEND_APPROVED || label_name == FRONTEND_APPROVED
+        if label['name'] == BACKEND_OK || label['name'] == FRONTEND_OK
           count += 1
+        elsif label['name'] == NEEDS_WORK
+          needs_work = true
         end
       end
 
-      report_status(count)
+      report_status(count, needs_work)
     end
 
-    def report_status(count)
-      if count == 2
+    def report_status(count, needs_work)
+      if needs_work == true
+        failure
+      elsif count == 2
         success
       else
         pending
