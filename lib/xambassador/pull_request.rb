@@ -5,7 +5,7 @@ require 'net/https'
 require 'uri'
 
 require_relative 'connection'
-require_relative 'checks/labels'
+require_relative 'status_checks/labels'
 
 module Xambassador
   # Pull Request helpers
@@ -23,10 +23,7 @@ module Xambassador
     def handle_opened_pull_request(pull_request)
       @connection = Xambassador::Connection.new
 
-      name = pull_request['base']['repo']['full_name']
-      sha = pull_request['head']['sha']
-
-      Xambassador::CheckLabels.new(pull_request, name, sha, @connection)
+      Xambassador::CheckLabels.new(@connection, pull_request)
     end
   end
 end

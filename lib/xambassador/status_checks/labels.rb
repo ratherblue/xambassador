@@ -4,17 +4,17 @@ require 'renegade'
 require 'net/https'
 require 'uri'
 
+require_relative '../status_check'
+
 module Xambassador
   # Pull Request helpers
-  class CheckLabels
-    def initialize(pull_request, name, sha, connection)
-      connection.client.create_status(name, sha, 'pending',
-        context: 'Peer Review',
-        description: 'This needs work'
-      )
-      puts 'before get issues'
+  class CheckLabels < StatusCheck
+    def run(pull_request)
       labels = fetch_labels(pull_request['issue_url'])
+      puts 'running check'
       puts labels
+
+      success
     end
 
     def fetch_labels(url)
@@ -27,6 +27,10 @@ module Xambassador
 
       body = JSON.parse(response.body)
       body['labels']
+    end
+
+    def check_labels(labels)
+
     end
   end
 end
