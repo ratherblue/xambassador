@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency("octokit", "~> 4.3.0")
   spec.add_development_dependency("webmock", "~> 1.24.2")
   spec.add_development_dependency("sinatra", "~> 1.4.7")
+  spec.add_development_dependency("renegade", "0.1.49")
 end

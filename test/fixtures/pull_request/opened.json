@@ -46,7 +46,7 @@
     "statuses_url": "https://api.github.com/repos/ratherblue/git-hooks/statuses/d79da21d5d8330332895dcff4b49400705de78c9",
     "head": {
       "label": "ratherblue:test-web-hook",
-      "ref": "test-web-hook",
+      "ref": "story-12343",
       "sha": "d79da21d5d8330332895dcff4b49400705de78c9",
       "user": {
         "login": "ratherblue",

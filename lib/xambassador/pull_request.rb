@@ -5,6 +5,7 @@ require "uri"
 
 require_relative "connection"
 require_relative "status_checks/peer_review"
+require_relative "status_checks/branch_name"
 
 module Xambassador
   # Pull Request helpers
@@ -25,6 +26,7 @@ module Xambassador
       @connection = Xambassador::Connection.new
 
       Xambassador::PeerReview.new(@connection, pull_request)
+      Xambassador::BranchName.new(@connection, pull_request)
     end
   end
 end

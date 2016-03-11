@@ -19,9 +19,21 @@ describe Xambassador::PullRequest do
     labels = File.read(
       File.expand_path("./test/fixtures/pull_request/labels/good.json")
     )
+
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
         ':"Success","state":"success"}',
+            headers: {
+              "Accept" => "application/vnd.github.v3+json",
+              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
+              "Content-Type" => "application/json",
+              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+      .to_return(status: 200, body: "", headers: {})
+
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"Branch Name","description"'\
+        ':"","state":"success"}',
             headers: {
               "Accept" => "application/vnd.github.v3+json",
               "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
@@ -45,6 +57,17 @@ describe Xambassador::PullRequest do
       .with(body: '{"context":"Peer Review","description"'\
         ':"Labels \'backend approved\' and \'frontend approved\''\
         ' are required","state":"pending"}',
+            headers: {
+              "Accept" => "application/vnd.github.v3+json",
+              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
+              "Content-Type" => "application/json",
+              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+      .to_return(status: 200, body: "", headers: {})
+
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"Branch Name","description"'\
+        ':"","state":"success"}',
             headers: {
               "Accept" => "application/vnd.github.v3+json",
               "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
@@ -79,6 +102,18 @@ describe Xambassador::PullRequest do
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
         ':"Needs work","state":"failure"}',
+            headers: {
+              "Accept" => "application/vnd.github.v3+json",
+              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
+              "Content-Type" => "application/json",
+              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+      .to_return(status: 200, body: "", headers: {})
+
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"Branch Name","description"'\
+        ':"Branches must start with bug-##### or story-#####.",'\
+        '"state":"failure"}',
             headers: {
               "Accept" => "application/vnd.github.v3+json",
               "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
