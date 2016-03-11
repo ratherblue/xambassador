@@ -23,7 +23,6 @@ module Xambassador
     end
 
     def fetch_labels(url)
-      puts 'fetch_labels'
       uri = URI.parse(url)
 
       http = Net::HTTP.new(uri.host, uri.port)
