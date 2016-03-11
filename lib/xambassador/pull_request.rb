@@ -1,6 +1,5 @@
 require "json"
 require "octokit"
-require "renegade"
 require "net/https"
 require "uri"
 
