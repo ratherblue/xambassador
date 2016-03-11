@@ -8,6 +8,12 @@ describe Xambassador::PullRequest do
   payload = ""
   url_prefix = "https://api.github.com/repos/ratherblue/git-hooks"
   sha = "d79da21d5d8330332895dcff4b49400705de78c9"
+  headers = {
+    "Accept" => "application/vnd.github.v3+json",
+    "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+    "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
+    "Content-Type" => "application/json",
+    "User-Agent" => "Octokit Ruby Gem 4.3.0" }
 
   it "should run an open pull request" do
     payload = File.read(
@@ -23,23 +29,13 @@ describe Xambassador::PullRequest do
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
         ':"Success","state":"success"}',
-            headers: {
-              "Accept" => "application/vnd.github.v3+json",
-              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
-              "Content-Type" => "application/json",
-              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+            headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Branch Name","description"'\
         ':"","state":"success"}',
-            headers: {
-              "Accept" => "application/vnd.github.v3+json",
-              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
-              "Content-Type" => "application/json",
-              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+            headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
     stub_request(:get, "#{url_prefix}/issues/27")
@@ -57,23 +53,13 @@ describe Xambassador::PullRequest do
       .with(body: '{"context":"Peer Review","description"'\
         ':"Labels \'backend approved\' and \'frontend approved\''\
         ' are required","state":"pending"}',
-            headers: {
-              "Accept" => "application/vnd.github.v3+json",
-              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
-              "Content-Type" => "application/json",
-              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+            headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Branch Name","description"'\
         ':"","state":"success"}',
-            headers: {
-              "Accept" => "application/vnd.github.v3+json",
-              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
-              "Content-Type" => "application/json",
-              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+            headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
     stub_request(:get, "#{url_prefix}/issues/27")
@@ -102,24 +88,14 @@ describe Xambassador::PullRequest do
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
         ':"Needs work","state":"failure"}',
-            headers: {
-              "Accept" => "application/vnd.github.v3+json",
-              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
-              "Content-Type" => "application/json",
-              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+            headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Branch Name","description"'\
         ':"Branches must start with bug-##### or story-#####.",'\
         '"state":"failure"}',
-            headers: {
-              "Accept" => "application/vnd.github.v3+json",
-              "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-              "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
-              "Content-Type" => "application/json",
-              "User-Agent" => "Octokit Ruby Gem 4.3.0" })
+            headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
     stub_request(:get, "#{url_prefix}/issues/27")
