@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    xambassador (0.0.1)
+    xambassador (0.0.2)
 
 GEM
   remote: https://rubygems.org/
