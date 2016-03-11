@@ -26,9 +26,13 @@ describe Xambassador::PullRequest do
       File.expand_path("./test/fixtures/pull_request/labels/good.json")
     )
 
+    tree = File.read(
+      File.expand_path("./test/fixtures/pull_request/trees/good.json")
+    )
+
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
-        ':"Success","state":"success"}',
+        ':"","state":"success"}',
             headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
@@ -38,9 +42,19 @@ describe Xambassador::PullRequest do
             headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"No Protected Files","description"'\
+        ':"","state":"success"}',
+            headers: headers)
+      .to_return(status: 200, body: "", headers: {})
+
     stub_request(:get, "#{url_prefix}/issues/27")
       .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
       .to_return(status: 200, body: labels, headers: {})
+
+    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
+      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
+      .to_return(status: 200, body: tree, headers: {})
 
     subject.new(payload)
   end
@@ -49,6 +63,11 @@ describe Xambassador::PullRequest do
     labels = File.read(
       File.expand_path("./test/fixtures/pull_request/labels/pending.json")
     )
+
+    tree = File.read(
+      File.expand_path("./test/fixtures/pull_request/trees/good.json")
+    )
+
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
         ':"Labels \'backend approved\' and \'frontend approved\''\
@@ -62,9 +81,19 @@ describe Xambassador::PullRequest do
             headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"No Protected Files","description"'\
+        ':"","state":"success"}',
+            headers: headers)
+      .to_return(status: 200, body: "", headers: {})
+
     stub_request(:get, "#{url_prefix}/issues/27")
       .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
       .to_return(status: 200, body: labels, headers: {})
+
+    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
+      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
+      .to_return(status: 200, body: tree, headers: {})
 
     payload = File.read(
       File.expand_path("./test/fixtures/pull_request/opened.json")
@@ -86,6 +115,10 @@ describe Xambassador::PullRequest do
       File.expand_path("./test/fixtures/pull_request/labels/needs_work.json")
     )
 
+    tree = File.read(
+      File.expand_path("./test/fixtures/pull_request/trees/protected.json")
+    )
+
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
         ':"Needs work","state":"failure"}',
@@ -99,9 +132,19 @@ describe Xambassador::PullRequest do
             headers: headers)
       .to_return(status: 200, body: "", headers: {})
 
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"No Protected Files","description"'\
+        ':"You edited [\"web.config\"]","state":"failure"}',
+            headers: headers)
+      .to_return(status: 200, body: "", headers: {})
+
     stub_request(:get, "#{url_prefix}/issues/27")
       .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
       .to_return(status: 200, body: labels, headers: {})
+
+    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
+      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
+      .to_return(status: 200, body: tree, headers: {})
 
     subject.new(payload)
   end
