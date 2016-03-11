@@ -85,7 +85,7 @@ describe Xambassador::PullRequest do
     labels = File.read(
       File.expand_path("./test/fixtures/pull_request/labels/needs_work.json")
     )
-  
+
     stub_request(:post, "#{url_prefix}/statuses/#{sha}")
       .with(body: '{"context":"Peer Review","description"'\
         ':"Needs work","state":"failure"}',
