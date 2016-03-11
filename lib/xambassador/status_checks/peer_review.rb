@@ -16,7 +16,6 @@ module Xambassador
 
       @description_pending = "Labels '#{BACKEND_OK}'"\
         " and '#{FRONTEND_OK}' are required"
-      @description_success = "Success"
       @description_failure = "Needs work"
 
       fetch_labels(pull_request["issue_url"])

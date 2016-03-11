@@ -6,6 +6,7 @@ require "uri"
 require_relative "connection"
 require_relative "status_checks/peer_review"
 require_relative "status_checks/branch_name"
+require_relative "status_checks/protected_files"
 
 module Xambassador
   # Pull Request helpers
@@ -27,6 +28,7 @@ module Xambassador
 
       Xambassador::PeerReview.new(@connection, pull_request)
       Xambassador::BranchName.new(@connection, pull_request)
+      Xambassador::ProtectedFiles.new(@connection, pull_request)
     end
   end
 end

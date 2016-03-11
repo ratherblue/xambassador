@@ -12,7 +12,6 @@ module Xambassador
       super(connection, pull_request, "Branch Name")
 
       branch_check = Renegade::BranchName.new
-      @description_success = ""
       @description_failure = branch_check.warning
 
       branch_name = pull_request['head']['ref']

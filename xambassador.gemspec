@@ -19,8 +19,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency("minitest")
   spec.add_development_dependency("minitest-reporters", "1.1.7")
   spec.add_development_dependency("rubocop", "~> 0.37.2")
-  spec.add_development_dependency("octokit", "~> 4.3.0")
   spec.add_development_dependency("webmock", "~> 1.24.2")
-  spec.add_development_dependency("sinatra", "~> 1.4.7")
-  spec.add_development_dependency("renegade", "0.1.49")
+
+  spec.add_dependency("octokit", "~> 4.3.0")
+  spec.add_dependency("sinatra", "~> 1.4.7")
+  spec.add_dependency("renegade", "0.1.49")
+  spec.add_dependency("uri_template", "0.7.0")
 end

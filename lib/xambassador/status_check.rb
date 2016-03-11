@@ -9,7 +9,7 @@ module Xambassador
       @context = context
 
       @description_pending = "Pending"
-      @description_success = "Success"
+      @description_success = ""
       @description_failure = "Failure"
     end
 
