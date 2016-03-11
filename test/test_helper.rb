@@ -1,7 +1,7 @@
 require 'coveralls'
 require 'minitest/reporters'
 
-# Coveralls.wear!
+Coveralls.wear!
 Minitest::Reporters.use!(
   Minitest::Reporters::SpecReporter.new,
   ENV,
