@@ -1,25 +1,25 @@
-require 'json'
-require 'net/https'
-require 'uri'
+require "json"
+require "net/https"
+require "uri"
 
-require_relative '../status_check'
+require_relative "../status_check"
 
 module Xambassador
   # Check peer review status
   class PeerReview < StatusCheck
-    BACKEND_OK = 'backend approved'.freeze
-    FRONTEND_OK = 'frontend approved'.freeze
-    NEEDS_WORK = 'needs work'.freeze
+    BACKEND_OK = "backend approved".freeze
+    FRONTEND_OK = "frontend approved".freeze
+    NEEDS_WORK = "needs work".freeze
 
     def initialize(connection, pull_request)
-      super(connection, pull_request, 'Peer Review')
+      super(connection, pull_request, "Peer Review")
 
-      @description_pending = "Labels '#{BACKEND_OK}'"\
-        " and '#{FRONTEND_OK}' are required"
-      @description_success = 'Success'
-      @description_failure = 'Needs work'
+      @description_pending = "Labels \"#{BACKEND_OK}\""\
+        " and \"#{FRONTEND_OK}\" are required"
+      @description_success = "Success"
+      @description_failure = "Needs work"
 
-      fetch_labels(pull_request['issue_url'])
+      fetch_labels(pull_request["issue_url"])
     end
 
     def fetch_labels(url)
@@ -31,7 +31,7 @@ module Xambassador
       response = http.request(Net::HTTP::Get.new(url))
 
       body = JSON.parse(response.body)
-      check_labels(body['labels'])
+      check_labels(body["labels"])
     end
 
     def check_labels(labels)
@@ -39,9 +39,9 @@ module Xambassador
       needs_work = false
 
       labels.each do |label|
-        if label['name'] == BACKEND_OK || label['name'] == FRONTEND_OK
+        if label["name"] == BACKEND_OK || label["name"] == FRONTEND_OK
           count += 1
-        elsif label['name'] == NEEDS_WORK
+        elsif label["name"] == NEEDS_WORK
           needs_work = true
         end
       end

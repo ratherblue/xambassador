@@ -1,4 +1,4 @@
-require 'xambassador/version'
+require "xambassador/version"
 
 # Xambassador module
 module Xambassador

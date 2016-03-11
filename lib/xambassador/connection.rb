@@ -1,4 +1,4 @@
-require 'octokit'
+require "octokit"
 
 module Xambassador
   # Connection helpers
@@ -10,7 +10,7 @@ module Xambassador
     end
 
     def token
-      ENV['GITHUB_AUTH_TOKEN']
+      ENV["GITHUB_AUTH_TOKEN"]
     end
   end
 end
