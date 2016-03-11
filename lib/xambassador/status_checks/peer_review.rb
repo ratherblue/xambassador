@@ -14,8 +14,8 @@ module Xambassador
     def initialize(connection, pull_request)
       super(connection, pull_request, 'Peer Review')
 
-      @description_pending = "Labels '#{BACKEND_OK}' \
-        and '#{FRONTEND_OK}' are required"
+      @description_pending = "Labels '#{BACKEND_OK}'"\
+        " and '#{FRONTEND_OK}' are required"
       @description_success = 'Success'
       @description_failure = 'Needs work'
 
