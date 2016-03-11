@@ -9,8 +9,6 @@ require_relative "status_checks/peer_review"
 module Xambassador
   # Pull Request helpers
   class PullRequest
-    attr_reader :payload, :connection
-
     def initialize(payload)
       action = payload["action"]
 
