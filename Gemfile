@@ -5,4 +5,5 @@ gemspec
 
 # checks that do not have to be enabled
 gem 'coveralls', require: false
+gem 'minitest'
 gem 'minitest-reporters'

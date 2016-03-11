@@ -1,5 +1,5 @@
-require 'coveralls'
-require 'minitest/reporters'
+require "coveralls"
+require "minitest/reporters"
 
 Coveralls.wear!
 Minitest::Reporters.use!(
@@ -8,7 +8,7 @@ Minitest::Reporters.use!(
   Minitest.backtrace_filter
 )
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 
-require 'xambassador'
-require 'minitest/autorun'
+require "xambassador"
+require "minitest/autorun"
