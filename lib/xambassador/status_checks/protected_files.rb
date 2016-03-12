@@ -15,11 +15,10 @@ module Xambassador
       @description_success = ""
       @description_failure = "Edited protected files"
 
-      sha = pull_request['head']['sha']
       url = pull_request['head']['repo']['trees_url']
 
       url_template = URITemplate.new(url)
-      fetch_changed_files(url_template.expand('sha' => sha))
+      fetch_changed_files(url_template.expand('sha' => @sha))
     end
 
     def fetch_changed_files(url)
