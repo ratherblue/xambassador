@@ -1,19 +1,19 @@
-require "json"
-require "net/https"
-require "uri"
-require "renegade/branch_name"
-require "uri_template"
+require 'json'
+require 'net/https'
+require 'uri'
+require 'renegade/branch_name'
+require 'uri_template'
 
-require_relative "../status_check"
+require_relative '../status_check'
 
 module Xambassador
   # Check peer review status
   class ProtectedFiles < StatusCheck
     def initialize(connection, pull_request)
-      super(connection, pull_request, "No Protected Files")
+      super(connection, pull_request, 'No Protected Files')
 
-      @description_success = ""
-      @description_failure = "Edited protected files"
+      @description_success = ''
+      @description_failure = 'Edited protected files'
 
       url = pull_request['head']['repo']['trees_url']
 
@@ -50,6 +50,32 @@ module Xambassador
 
     def report_status(files)
       if files.empty?
+        success
+      else
+        fetch_labels(@pull_request['issue_url'], files)
+      end
+    end
+
+    def fetch_labels(url, files)
+      uri = URI.parse(url)
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      response = http.request(Net::HTTP::Get.new(url))
+
+      body = JSON.parse(response.body)
+      check_labels(body['labels'], files)
+    end
+
+    def check_labels(labels, files)
+      pass = false
+
+      labels.each do |label|
+        pass = true if label['name'] == 'edited .config'
+      end
+
+      if pass
         success
       else
         @description_failure = "You edited #{files}"

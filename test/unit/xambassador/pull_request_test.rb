@@ -148,4 +148,49 @@ describe Xambassador::PullRequest do
 
     subject.new(payload)
   end
+
+  it "should pass a pull request with protected files" do
+    payload = File.read(
+      File.expand_path("./test/fixtures/pull_request/labeled.json")
+    )
+
+    payload = JSON.parse(payload)
+
+    labels = File.read(
+      File.expand_path("./test/fixtures/pull_request/labels/edited_config.json")
+    )
+
+    tree = File.read(
+      File.expand_path("./test/fixtures/pull_request/trees/protected.json")
+    )
+
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"Peer Review","description"'\
+        ':"","state":"success"}',
+            headers: headers)
+      .to_return(status: 200, body: "", headers: {})
+
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"Branch Name","description"'\
+        ':"Branches must start with bug-##### or story-#####.",'\
+        '"state":"failure"}',
+            headers: headers)
+      .to_return(status: 200, body: "", headers: {})
+
+    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
+      .with(body: '{"context":"No Protected Files","description"'\
+        ':"","state":"success"}',
+            headers: headers)
+      .to_return(status: 200, body: "", headers: {})
+
+    stub_request(:get, "#{url_prefix}/issues/27")
+      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
+      .to_return(status: 200, body: labels, headers: {})
+
+    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
+      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
+      .to_return(status: 200, body: tree, headers: {})
+
+    subject.new(payload)
+  end
 end

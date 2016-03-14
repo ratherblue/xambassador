@@ -1,0 +1,63 @@
+{
+  "url": "https://api.github.com/repos/ratherblue/git-hooks/issues/29",
+  "repository_url": "https://api.github.com/repos/ratherblue/git-hooks",
+  "labels_url": "https://api.github.com/repos/ratherblue/git-hooks/issues/29/labels{/name}",
+  "comments_url": "https://api.github.com/repos/ratherblue/git-hooks/issues/29/comments",
+  "events_url": "https://api.github.com/repos/ratherblue/git-hooks/issues/29/events",
+  "html_url": "https://github.com/ratherblue/git-hooks/pull/29",
+  "id": 140813984,
+  "number": 29,
+  "title": "Update README.md",
+  "user": {
+    "login": "ratherblue",
+    "id": 15620791,
+    "avatar_url": "https://avatars.githubusercontent.com/u/15620791?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/ratherblue",
+    "html_url": "https://github.com/ratherblue",
+    "followers_url": "https://api.github.com/users/ratherblue/followers",
+    "following_url": "https://api.github.com/users/ratherblue/following{/other_user}",
+    "gists_url": "https://api.github.com/users/ratherblue/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/ratherblue/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/ratherblue/subscriptions",
+    "organizations_url": "https://api.github.com/users/ratherblue/orgs",
+    "repos_url": "https://api.github.com/users/ratherblue/repos",
+    "events_url": "https://api.github.com/users/ratherblue/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/ratherblue/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "url": "https://api.github.com/repos/ratherblue/git-hooks/labels/backend%20approved",
+      "name": "backend approved",
+      "color": "eb6420"
+    },
+    {
+      "url": "https://api.github.com/repos/ratherblue/git-hooks/labels/edited%20.config",
+      "name": "edited .config",
+      "color": "bfdadc"
+    },
+    {
+      "url": "https://api.github.com/repos/ratherblue/git-hooks/labels/frontend%20approved",
+      "name": "frontend approved",
+      "color": "207de5"
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignee": null,
+  "milestone": null,
+  "comments": 0,
+  "created_at": "2016-03-14T22:24:09Z",
+  "updated_at": "2016-03-14T22:43:55Z",
+  "closed_at": null,
+  "pull_request": {
+    "url": "https://api.github.com/repos/ratherblue/git-hooks/pulls/29",
+    "html_url": "https://github.com/ratherblue/git-hooks/pull/29",
+    "diff_url": "https://github.com/ratherblue/git-hooks/pull/29.diff",
+    "patch_url": "https://github.com/ratherblue/git-hooks/pull/29.patch"
+  },
+  "body": "",
+  "closed_by": null
+}

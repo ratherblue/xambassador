@@ -2,6 +2,7 @@ module Xambassador
   # Status Check class
   class StatusCheck
     def initialize(connection, pull_request, context)
+      @pull_request = pull_request
       @name = pull_request["base"]["repo"]["full_name"]
       @sha = pull_request["head"]["sha"]
 
