@@ -1,196 +1,140 @@
-require "xambassador/pull_request"
-require "json"
-require_relative "../../spec_helper"
+require 'xambassador/pull_request'
+require 'json'
+require_relative '../../spec_helper'
+require_relative '../../fake_github'
 
 describe Xambassador::PullRequest do
   subject { Xambassador::PullRequest }
 
-  payload = ""
-  url_prefix = "https://api.github.com/repos/ratherblue/git-hooks"
-  sha = "d79da21d5d8330332895dcff4b49400705de78c9"
-  headers = {
-    "Accept" => "application/vnd.github.v3+json",
-    "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-    "Authorization" => "token " + ENV["GITHUB_AUTH_TOKEN"],
-    "Content-Type" => "application/json",
-    "User-Agent" => "Octokit Ruby Gem 4.3.0" }
-
-  it "should run an open pull request" do
-    payload = File.read(
-      File.expand_path("./test/fixtures/pull_request/opened.json")
-    )
-
-    payload = JSON.parse(payload)
-
-    labels = File.read(
-      File.expand_path("./test/fixtures/pull_request/labels/good.json")
-    )
-
-    tree = File.read(
-      File.expand_path("./test/fixtures/pull_request/trees/good.json")
-    )
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Peer Review","description"'\
-        ':"","state":"success"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Branch Name","description"'\
-        ':"","state":"success"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"No Protected Files","description"'\
-        ':"","state":"success"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:get, "#{url_prefix}/issues/27")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: labels, headers: {})
-
-    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: tree, headers: {})
-
-    subject.new(payload)
+  before do
+    stub_request(:any, /api.github.com/).to_rack(FakeGitHub)
   end
 
-  it "should be pending" do
-    labels = File.read(
-      File.expand_path("./test/fixtures/pull_request/labels/pending.json")
-    )
-
-    tree = File.read(
-      File.expand_path("./test/fixtures/pull_request/trees/good.json")
-    )
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Peer Review","description"'\
-        ':"Labels \'backend approved\' and \'frontend approved\''\
-        ' are required","state":"pending"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Branch Name","description"'\
-        ':"","state":"success"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"No Protected Files","description"'\
-        ':"","state":"success"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:get, "#{url_prefix}/issues/27")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: labels, headers: {})
-
-    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: tree, headers: {})
-
+  it 'should pass an open pull request' do
     payload = File.read(
-      File.expand_path("./test/fixtures/pull_request/opened.json")
+      File.expand_path('./test/fixtures/pull_request/all_pass/payload.json')
     )
+
+    responses = []
+    signatures = []
+
+    WebMock.after_request do |request_signature, response|
+      signatures.push(request_signature)
+      responses.push(response.body)
+    end
 
     payload = JSON.parse(payload)
-
     subject.new(payload)
+
+    # Check number of responses
+    responses.length.must_equal(5)
+
+    # Make sure fixture didn't change...
+    payload['pull_request']['head']['sha'].must_equal('good-sha')
+    payload['pull_request']['head']['ref'].must_equal('story-12343')
+
+    # Peer Review
+    body = JSON.parse(signatures[1].body)
+    body['context'].must_equal('Peer Review')
+    body['description'].must_equal('')
+    body['state'].must_equal('success')
+
+    # Branch Name
+    body = JSON.parse(signatures[2].body)
+    body['context'].must_equal('Branch Name')
+    body['description'].must_equal('')
+    body['state'].must_equal('success')
+
+    # Protected Files
+    body = JSON.parse(signatures[4].body)
+    body['context'].must_equal('No Protected Files')
+    body['description'].must_equal('')
+    body['state'].must_equal('success')
   end
 
-  it "should run a labeled pull request" do
+  it 'should fail all statuses' do
     payload = File.read(
-      File.expand_path("./test/fixtures/pull_request/labeled.json")
+      File.expand_path('./test/fixtures/pull_request/all_fail/payload.json')
     )
+
+    responses = []
+    signatures = []
+
+    WebMock.after_request do |request_signature, response|
+      signatures.push(request_signature)
+      responses.push(response.body)
+    end
 
     payload = JSON.parse(payload)
-
-    labels = File.read(
-      File.expand_path("./test/fixtures/pull_request/labels/needs_work.json")
-    )
-
-    tree = File.read(
-      File.expand_path("./test/fixtures/pull_request/trees/protected.json")
-    )
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Peer Review","description"'\
-        ':"Needs work","state":"failure"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Branch Name","description"'\
-        ':"Branches must start with bug-##### or story-#####.",'\
-        '"state":"failure"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"No Protected Files","description"'\
-        ':"You edited [\"web.config\"]","state":"failure"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:get, "#{url_prefix}/issues/27")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: labels, headers: {})
-
-    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: tree, headers: {})
-
     subject.new(payload)
+
+    # Check number of responses
+    responses.length.must_equal(6)
+
+    # Make sure fixture didn't change...
+    payload['pull_request']['head']['sha'].must_equal('bad-sha')
+    payload['pull_request']['head']['ref'].must_equal('test-web-hook')
+
+    # Peer Review
+    body = JSON.parse(signatures[1].body)
+    body['context'].must_equal('Peer Review')
+    body['description'].must_equal('Needs work')
+    body['state'].must_equal('failure')
+
+    # Branch Name
+    body = JSON.parse(signatures[2].body)
+    body['context'].must_equal('Branch Name')
+    body['description'].must_equal('Branches must start '\
+                                   'with bug-##### or story-#####.')
+    body['state'].must_equal('failure')
+
+    # Protected Files
+    body = JSON.parse(signatures[5].body)
+    body['context'].must_equal('No Protected Files')
+    body['description'].must_equal('You edited ["web.config"]')
+    body['state'].must_equal('failure')
   end
 
-  it "should pass a pull request with protected files" do
+  it 'should be pending where applicable' do
     payload = File.read(
-      File.expand_path("./test/fixtures/pull_request/labeled.json")
+      File.expand_path('./test/fixtures/pull_request/all_pending/payload.json')
     )
+
+    responses = []
+    signatures = []
+
+    WebMock.after_request do |request_signature, response|
+      signatures.push(request_signature)
+      responses.push(response.body)
+    end
 
     payload = JSON.parse(payload)
-
-    labels = File.read(
-      File.expand_path("./test/fixtures/pull_request/labels/edited_config.json")
-    )
-
-    tree = File.read(
-      File.expand_path("./test/fixtures/pull_request/trees/protected.json")
-    )
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Peer Review","description"'\
-        ':"","state":"success"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"Branch Name","description"'\
-        ':"Branches must start with bug-##### or story-#####.",'\
-        '"state":"failure"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:post, "#{url_prefix}/statuses/#{sha}")
-      .with(body: '{"context":"No Protected Files","description"'\
-        ':"","state":"success"}',
-            headers: headers)
-      .to_return(status: 200, body: "", headers: {})
-
-    stub_request(:get, "#{url_prefix}/issues/27")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: labels, headers: {})
-
-    stub_request(:get, "#{url_prefix}/git/trees/#{sha}")
-      .with(headers: { "Accept" => "*/*", "User-Agent" => "Ruby" })
-      .to_return(status: 200, body: tree, headers: {})
-
     subject.new(payload)
+
+    # Check number of responses
+    responses.length.must_equal(6)
+
+    # Make sure fixture didn't change...
+    payload['pull_request']['head']['sha'].must_equal('pending-sha')
+    payload['pull_request']['head']['ref'].must_equal('bug-1234')
+
+    # Peer Review
+    body = JSON.parse(signatures[1].body)
+    body['context'].must_equal('Peer Review')
+    body['description'].must_equal('Labels \'backend approved\''\
+                                   ' and \'frontend approved\' are required')
+    body['state'].must_equal('pending')
+
+    # Branch Name
+    body = JSON.parse(signatures[2].body)
+    body['context'].must_equal('Branch Name')
+    body['description'].must_equal('')
+    body['state'].must_equal('success')
+
+    # Protected Files
+    body = JSON.parse(signatures[5].body)
+    body['context'].must_equal('No Protected Files')
+    body['description'].must_equal('')
+    body['state'].must_equal('success')
   end
 end

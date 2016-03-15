@@ -1,5 +1,5 @@
 {
-  "action": "unlabeled",
+  "action": "labeled",
   "number": 27,
   "pull_request": {
     "url": "https://api.github.com/repos/ratherblue/git-hooks/pulls/27",
@@ -33,10 +33,10 @@
     },
     "body": "",
     "created_at": "2016-03-10T22:11:33Z",
-    "updated_at": "2016-03-10T23:55:20Z",
+    "updated_at": "2016-03-10T22:11:33Z",
     "closed_at": null,
     "merged_at": null,
-    "merge_commit_sha": "9b97b76ddae14d738e4781696cf0d21fe0d85665",
+    "merge_commit_sha": "a1c6db4ddf070ce76a277d1e36028ba5c9fee8af",
     "assignee": null,
     "milestone": null,
     "commits_url": "https://api.github.com/repos/ratherblue/git-hooks/pulls/27/commits",
@@ -46,8 +46,8 @@
     "statuses_url": "https://api.github.com/repos/ratherblue/git-hooks/statuses/d79da21d5d8330332895dcff4b49400705de78c9",
     "head": {
       "label": "ratherblue:test-web-hook",
-      "ref": "test-web-hook",
-      "sha": "d79da21d5d8330332895dcff4b49400705de78c9",
+      "ref": "story-12343",
+      "sha": "good-sha",
       "user": {
         "login": "ratherblue",
         "id": 15620791,
@@ -304,11 +304,6 @@
     "additions": 0,
     "deletions": 2,
     "changed_files": 1
-  },
-  "label": {
-    "url": "https://api.github.com/repos/ratherblue/git-hooks/labels/needs%20work",
-    "name": "needs work",
-    "color": "e11d21"
   },
   "repository": {
     "id": 46371072,

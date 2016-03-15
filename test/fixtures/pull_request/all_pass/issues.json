@@ -32,6 +32,11 @@
       "url": "https://api.github.com/repos/ratherblue/git-hooks/labels/backend%20approved",
       "name": "backend approved",
       "color": "eb6420"
+    },
+    {
+      "url": "https://api.github.com/repos/ratherblue/git-hooks/labels/frontend%20approved",
+      "name": "frontend approved",
+      "color": "207de5"
     }
   ],
   "state": "open",
@@ -40,7 +45,7 @@
   "milestone": null,
   "comments": 0,
   "created_at": "2016-03-10T22:11:33Z",
-  "updated_at": "2016-03-10T23:55:20Z",
+  "updated_at": "2016-03-11T03:04:59Z",
   "closed_at": null,
   "pull_request": {
     "url": "https://api.github.com/repos/ratherblue/git-hooks/pulls/27",
