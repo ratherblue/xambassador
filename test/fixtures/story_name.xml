@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Assets total="1" pageSize="2147483647" pageStart="0">
+  <Asset href="/Example/rest-1.v1/Data/Story/1111457" id="Story:1111457">
+    <Attribute name="Name">Example Story Title</Attribute>
+  </Asset>
+</Assets>

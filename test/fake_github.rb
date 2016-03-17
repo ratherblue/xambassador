@@ -15,6 +15,9 @@ class FakeGitHub < Sinatra::Base
     end
   end
 
+  patch '/repos/:owner/:repo/pulls/:number' do
+  end
+
   post '/repos/:owner/:repo/statuses/:ref' do
   end
 

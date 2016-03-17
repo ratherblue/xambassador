@@ -2,12 +2,30 @@ require 'xambassador/pull_request'
 require 'json'
 require_relative '../../spec_helper'
 require_relative '../../fake_github'
+require_relative '../../fake_version_one'
 
 describe Xambassador::PullRequest do
   subject { Xambassador::PullRequest }
 
   before do
     stub_request(:any, /api.github.com/).to_rack(FakeGitHub)
+
+    xml = File.read(
+      File.expand_path('./test/fixtures/story_name.xml')
+    )
+    stub_request(:get, "#{ENV['VERSION_ONE_URL']}/rest-1.v1/Data/Story")
+      .with(
+        query: hash_including(
+          'sel' => 'Name',
+          'where' => "Number='B-51609'"
+        ),
+        headers: {
+          'Accept' => '*/*',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'User-Agent' => 'Ruby'
+        }
+      )
+      .to_return(status: 200, body: xml, headers: {})
   end
 
   it 'should pass an open pull request' do
@@ -112,11 +130,13 @@ describe Xambassador::PullRequest do
     subject.new(payload)
 
     # Check number of responses
-    responses.length.must_equal(6)
+    responses.length.must_equal(8)
 
     # Make sure fixture didn't change...
     payload['pull_request']['head']['sha'].must_equal('pending-sha')
-    payload['pull_request']['head']['ref'].must_equal('bug-1234')
+    payload['pull_request']['head']['ref'].must_equal('story-51609')
+
+    # Check title updates here since this is an opened pull request
 
     # Peer Review
     body = JSON.parse(signatures[1].body)

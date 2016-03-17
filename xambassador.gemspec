@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency("webmock", "~> 1.24.2")
 
   spec.add_dependency("octokit", "~> 4.3.0")
-  spec.add_dependency("renegade", "0.1.49")
+  spec.add_dependency("renegade", "0.1.51")
   spec.add_dependency("uri_template", "0.7.0")
+  spec.add_dependency("nokogiri", "1.6.7.2")
 end
