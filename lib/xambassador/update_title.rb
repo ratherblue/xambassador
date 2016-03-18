@@ -23,8 +23,8 @@ module Xambassador
     end
 
     def story_url(story_id)
-      ENV['VERSION_ONE_URL'] +
-        "/rest-1.v1/Data/Story?sel=Name&where=Number='B-#{story_id}'"
+      ENV['VERSION_ONE_URL'] + "/rest-1.v1/Data/Story"\
+        "?sel=Number,Estimate,Name&where=Number='B-#{story_id}'"
     end
 
     def fetch_story_data(url)
@@ -36,27 +36,34 @@ module Xambassador
 
       request = Net::HTTP::Get.new(url)
       request['Authorization'] = "Bearer #{ENV['VERSION_ONE_TOKEN']}"
-      response = http.request(Net::HTTP::Get.new(url))
-
+      response = http.request(request)
       update_title(response.body)
     end
 
     def update_title(xml)
-      title = extract_title(xml)
+      title = extract_story_title(xml)
       number = @pull_request['number']
       repo = @pull_request['head']['repo']['full_name']
 
-      @connection.client.update_pull_request(repo, number, title)
+      @connection.client.update_pull_request(repo, number, title: title)
     end
 
-    def extract_title(xml)
+    def extract_story_title(xml)
       doc = Nokogiri::XML(xml)
 
       if doc.at_xpath('//Assets')['total'] == '1'
-        doc.at_xpath('/Assets/Asset/Attribute/text()')
+        story_title(doc)
       else
         'INVALID STORY ID'
       end
+    end
+
+    def story_title(xml_doc)
+      story_name = xml_doc.css('Attribute[name=Name]').text
+      estimate = xml_doc.css('Attribute[name=Estimate]').text
+      number = xml_doc.css('Attribute[name=Number]').text
+
+      "(Story: #{number}) #{story_name}, #{estimate} pts"
     end
 
     def fetch_bug_data(bug_id)

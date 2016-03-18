@@ -8,6 +8,7 @@ require_relative 'status_checks/peer_review'
 require_relative 'status_checks/branch_name'
 require_relative 'status_checks/protected_files'
 require_relative 'update_title'
+require_relative 'update_manifest'
 
 module Xambassador
   # Pull Request helpers

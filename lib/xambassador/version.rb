@@ -1,4 +1,4 @@
 # Xambassador version
 module Xambassador
-  VERSION = "0.0.8".freeze
+  VERSION = '0.0.14'.freeze
 end

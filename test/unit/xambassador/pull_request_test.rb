@@ -16,7 +16,7 @@ describe Xambassador::PullRequest do
     stub_request(:get, "#{ENV['VERSION_ONE_URL']}/rest-1.v1/Data/Story")
       .with(
         query: hash_including(
-          'sel' => 'Name',
+          'sel' => 'Number,Estimate,Name',
           'where' => "Number='B-51609'"
         ),
         headers: {

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Assets total="1" pageSize="2147483647" pageStart="0">
-  <Asset href="/Example/rest-1.v1/Data/Story/1111457" id="Story:1111457">
-    <Attribute name="Name">Example Story Title</Attribute>
-  </Asset>
+    <Asset href="/ExampleEndpoint/rest-1.v1/Data/Story/1111457" id="Story:1111457">
+        <Attribute name="Number">B-51609</Attribute>
+        <Attribute name="Estimate">55</Attribute>
+        <Attribute name="Name">ICO - Long Term Branding - End to End Testing - March (QA Heavy)</Attribute>
+    </Asset>
 </Assets>
