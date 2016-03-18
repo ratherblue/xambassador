@@ -10,7 +10,7 @@ module Xambassador
       @connection = connection
       @pull_request = pull_request
       # only update newly opened requests
-      run(pull_request) if action == 'opened'
+      run(pull_request) if action == 'opened' || action == 'reopened'
     end
 
     def run(pull_request)
@@ -53,7 +53,7 @@ module Xambassador
       doc = Nokogiri::XML(xml)
 
       if doc.at_xpath('//Assets')['total'] == '1'
-        puts doc.at_xpath('/Assets/Asset/Attribute/text()')
+        doc.at_xpath('/Assets/Asset/Attribute/text()')
       else
         'INVALID STORY ID'
       end
