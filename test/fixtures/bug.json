@@ -1,0 +1,99 @@
+{
+   "bugs" : [
+      {
+         "actual_time" : 0,
+         "alias" : [],
+         "assigned_to" : "Rather.Blue@example.com",
+         "assigned_to_detail" : {
+            "email" : "Rather.Blue@example.com",
+            "id" : 372,
+            "name" : "Rather.Blue@example.com",
+            "real_name" : "Rather Blue"
+         },
+         "blocks" : [],
+         "cc" : [
+            "ddonley@example.com"
+         ],
+         "cc_detail" : [
+            {
+               "email" : "ddonley@example.com",
+               "id" : 43,
+               "name" : "ddonley@example.com",
+               "real_name" : "John Smith"
+            }
+         ],
+         "cf_androidversion" : "All",
+         "cf_browser" : "All",
+         "cf_deploydate" : null,
+         "cf_devgroup" : [],
+         "cf_device" : [],
+         "cf_discovered" : "DEV0#",
+         "cf_durable_team" : "Shoppers",
+         "cf_epic_id_txt" : "",
+         "cf_ieversion" : [],
+         "cf_iosversion" : "All",
+         "cf_issuetype" : "Regression",
+         "cf_msosversion" : "All",
+         "cf_multibrowser" : [],
+         "cf_omniturepagename" : "",
+         "cf_pagename" : [
+            "Awards"
+         ],
+         "cf_referringurl" : "",
+         "cf_rootcause" : "---",
+         "cf_rootcausedet" : "",
+         "cf_test_type" : "Exploratory Testing",
+         "cf_v1_size" : "---",
+         "cf_v1_sprint_num" : "",
+         "cf_v1_story_id" : "",
+         "cf_v1defectid" : "",
+         "cf_view_port" : [],
+         "classification" : "Unclassified",
+         "component" : "Ads",
+         "creation_time" : "2015-11-20T17:38:57Z",
+         "creator" : "Rather.Blue@example.com",
+         "creator_detail" : {
+            "email" : "Rather.Blue@example.com",
+            "id" : 372,
+            "name" : "Rather.Blue@example.com",
+            "real_name" : "Rather Blue"
+         },
+         "deadline" : null,
+         "depends_on" : [],
+         "dupe_of" : null,
+         "estimated_time" : 0,
+         "flags" : [],
+         "groups" : [],
+         "id" : 36384,
+         "is_cc_accessible" : true,
+         "is_confirmed" : true,
+         "is_creator_accessible" : true,
+         "is_open" : true,
+         "keywords" : [],
+         "last_change_time" : "2015-12-28T18:36:52Z",
+         "op_sys" : "All",
+         "platform" : "All",
+         "priority" : "---",
+         "product" : "example.com",
+         "qa_contact" : "qa_contact@example.com",
+         "qa_contact_detail" : {
+            "email" : "qa_contact@example.com",
+            "id" : 12,
+            "name" : "qa_contact@example.com",
+            "real_name" : "QA Contact"
+         },
+         "remaining_time" : 0,
+         "resolution" : "",
+         "see_also" : [],
+         "severity" : "Enhancement",
+         "status" : "ASSIGNED",
+         "summary" : "[TestBug] This is a fake bug used to test Bugzilla API",
+         "target_milestone" : "---",
+         "update_token" : "1458263114-qq2pTUEViWqgjZGsw7QZoX14vMAdB8eSOvjHLePEXN0",
+         "url" : "",
+         "version" : "Production",
+         "whiteboard" : ""
+      }
+   ],
+   "faults" : []
+}

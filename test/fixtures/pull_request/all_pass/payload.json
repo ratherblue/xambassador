@@ -1,5 +1,5 @@
 {
-  "action": "labeled",
+  "action": "reopened",
   "number": 27,
   "pull_request": {
     "url": "https://api.github.com/repos/ratherblue/git-hooks/pulls/27",
@@ -46,7 +46,7 @@
     "statuses_url": "https://api.github.com/repos/ratherblue/git-hooks/statuses/d79da21d5d8330332895dcff4b49400705de78c9",
     "head": {
       "label": "ratherblue:test-web-hook",
-      "ref": "story-12343",
+      "ref": "bug-36384",
       "sha": "good-sha",
       "user": {
         "login": "ratherblue",

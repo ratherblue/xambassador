@@ -18,12 +18,17 @@ module Xambassador
       if data['type'] == 'story'
         fetch_story_data(story_url(data['id']))
       elsif data['type'] == 'bug'
-        fetch_bug_data(data['id'])
+        fetch_bug_data(bug_url(data['id']))
       end
     end
 
+    def bug_url(bug_id)
+      ENV['BUGZILLA_URL'] + "/bug/#{bug_id}?"\
+        "Bugzilla_api_key=#{ENV['BUGZILLA_API_KEY']}"
+    end
+
     def story_url(story_id)
-      ENV['VERSION_ONE_URL'] + "/rest-1.v1/Data/Story"\
+      ENV['VERSION_ONE_URL'] + "/Data/Story"\
         "?sel=Number,Estimate,Name&where=Number='B-#{story_id}'"
     end
 
@@ -37,11 +42,11 @@ module Xambassador
       request = Net::HTTP::Get.new(url)
       request['Authorization'] = "Bearer #{ENV['VERSION_ONE_TOKEN']}"
       response = http.request(request)
-      update_title(response.body)
+      title = extract_story_title(response.body)
+      update_title(title)
     end
 
-    def update_title(xml)
-      title = extract_story_title(xml)
+    def update_title(title)
       number = @pull_request['number']
       repo = @pull_request['head']['repo']['full_name']
 
@@ -66,7 +71,23 @@ module Xambassador
       "(Story: #{number}) #{story_name}, #{estimate} pts"
     end
 
-    def fetch_bug_data(bug_id)
+    def fetch_bug_data(url)
+      uri = URI.parse(url)
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+      request = Net::HTTP::Get.new(url)
+      response = http.request(request)
+
+      update_title(bug_title(response.body))
+    end
+
+    def bug_title(json)
+      bug = json['bugs'][0]
+
+      "[#{bug['severity']}] (Bug: #{bug['id']}) #{bug['summary']}"
     end
   end
 end

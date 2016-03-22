@@ -1,5 +1,5 @@
 {
-  "action": "reopened",
+  "action": "labeled",
   "number": 28,
   "pull_request": {
     "url": "https://api.github.com/repos/ratherblue/git-hooks/pulls/28",

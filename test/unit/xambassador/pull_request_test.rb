@@ -13,7 +13,7 @@ describe Xambassador::PullRequest do
     xml = File.read(
       File.expand_path('./test/fixtures/story_name.xml')
     )
-    stub_request(:get, "#{ENV['VERSION_ONE_URL']}/rest-1.v1/Data/Story")
+    stub_request(:get, "#{ENV['VERSION_ONE_URL']}/Data/Story")
       .with(
         query: hash_including(
           'sel' => 'Number,Estimate,Name',
@@ -26,6 +26,22 @@ describe Xambassador::PullRequest do
         }
       )
       .to_return(status: 200, body: xml, headers: {})
+
+    bug_json = File.read(
+      File.expand_path('./test/fixtures/bug.json')
+    )
+    stub_request(:get, "#{ENV['BUGZILLA_URL']}/bug/36384")
+      .with(
+        query: hash_including(
+          'Bugzilla_api_key' => ENV['BUGZILLA_API_KEY']
+        ),
+        headers: {
+          'Accept' => '*/*',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'User-Agent' => 'Ruby'
+        }
+      )
+      .to_return(status: 200, body: bug_json, headers: {})
   end
 
   it 'should pass an open pull request' do
@@ -45,11 +61,11 @@ describe Xambassador::PullRequest do
     subject.new(payload)
 
     # Check number of responses
-    responses.length.must_equal(5)
+    responses.length.must_equal(7)
 
     # Make sure fixture didn't change...
     payload['pull_request']['head']['sha'].must_equal('good-sha')
-    payload['pull_request']['head']['ref'].must_equal('story-12343')
+    payload['pull_request']['head']['ref'].must_equal('bug-36384')
 
     # Peer Review
     body = JSON.parse(signatures[1].body)
