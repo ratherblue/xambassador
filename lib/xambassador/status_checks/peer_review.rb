@@ -22,12 +22,7 @@ module Xambassador
     end
 
     def fetch_labels(url)
-      uri = URI.parse(url)
-
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      response = http.request(Net::HTTP::Get.new(url))
+      response = Xambassador::Connection.request(url)
 
       body = JSON.parse(response.body)
       check_labels(body["labels"])

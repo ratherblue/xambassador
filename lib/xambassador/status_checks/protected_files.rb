@@ -20,16 +20,7 @@ module Xambassador
     end
 
     def fetch_changed_files(url)
-      uri = URI.parse(url)
-
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-      request = Net::HTTP::Get.new(url)
-      request['Authorization'] = "token #{ENV['GITHUB_AUTH_TOKEN']}"
-
-      response = http.request(request)
+      response = Xambassador::Connection.request(url)
       check_files(JSON.parse(response.body))
     end
 
@@ -57,19 +48,13 @@ module Xambassador
     end
 
     def fetch_labels(url, files)
-      uri = URI.parse(url)
-
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      response = http.request(Net::HTTP::Get.new(url))
+      response = Xambassador::Connection.request(url)
 
       body = JSON.parse(response.body)
       check_labels(body['labels'], files)
     end
 
     def check_labels(labels, files)
-      puts 'check_labels'
       pass = false
 
       labels.each do |label|
