@@ -63,31 +63,38 @@ module Xambassador
       end
     end
 
+    def estimate_format(estimate)
+      ", #{estimate} pts" unless estimate.nil?
+    end
+
     def story_title(xml_doc)
       story_name = xml_doc.css('Attribute[name=Name]').text
-      estimate = xml_doc.css('Attribute[name=Estimate]').text
+      estimate = estimate_format(xml_doc.css('Attribute[name=Estimate]').text)
       number = xml_doc.css('Attribute[name=Number]').text
 
-      "(Story: #{number}) #{story_name}, #{estimate} pts"
+      "(Story: #{number}) #{story_name}#{estimate}"
     end
 
     def fetch_bug_data(url)
       uri = URI.parse(url)
 
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+      http.use_ssl = false
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
       request = Net::HTTP::Get.new(url)
       response = http.request(request)
 
-      update_title(bug_title(response.body))
+      update_title(bug_title(JSON.parse(response.body)))
     end
 
     def bug_title(json)
       bug = json['bugs'][0]
 
-      "[#{bug['severity']}] (Bug: #{bug['id']}) #{bug['summary']}"
+      severity = bug['severity']
+      severity = " [#{severity}]" unless severity == ''
+
+      "(Bug: #{bug['id']}) #{bug['summary']}#{severity}"
     end
   end
 end
