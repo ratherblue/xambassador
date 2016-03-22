@@ -15,10 +15,8 @@ module Xambassador
       @description_success = ''
       @description_failure = 'Edited protected files'
 
-      url = pull_request['head']['repo']['trees_url']
-
-      url_template = URITemplate.new(url)
-      fetch_changed_files(url_template.expand('sha' => @sha))
+      url = pull_request['url'] + '/files'
+      fetch_changed_files(url)
     end
 
     def fetch_changed_files(url)
@@ -27,10 +25,12 @@ module Xambassador
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      response = http.request(Net::HTTP::Get.new(url))
 
-      body = JSON.parse(response.body)
-      check_files(body['tree'])
+      request = Net::HTTP::Get.new(url)
+      request['Authorization'] = "token #{ENV['GITHUB_AUTH_TOKEN']}"
+
+      response = http.request(request)
+      check_files(JSON.parse(response.body))
     end
 
     def check_files(files)
@@ -39,8 +39,8 @@ module Xambassador
 
       unless files.empty?
         files.each do |file|
-          if protected_files.include?(File.basename(file['path']).downcase)
-            changed_protected_files.push(file['path'])
+          if protected_files.include?(File.basename(file['filename']).downcase)
+            changed_protected_files.push(file['filename'])
           end
         end
       end
@@ -69,6 +69,7 @@ module Xambassador
     end
 
     def check_labels(labels, files)
+      puts 'check_labels'
       pass = false
 
       labels.each do |label|

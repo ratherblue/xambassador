@@ -18,17 +18,17 @@ class FakeGitHub < Sinatra::Base
   patch '/repos/:owner/:repo/pulls/:number' do
   end
 
-  post '/repos/:owner/:repo/statuses/:ref' do
+  get '/repos/:owner/:repo/pulls/:number/files' do
+    if params[:number] == '27'
+      json_response(200, 'pull_request/all_pass/files.json')
+    elsif params[:number] == '28'
+      json_response(200, 'pull_request/all_fail/files.json')
+    elsif params[:number] == '29'
+      json_response(200, 'pull_request/all_pending/files.json')
+    end
   end
 
-  get '/repos/:owner/:repo/git/trees/:sha' do
-    if params[:sha] == 'good-sha'
-      json_response(200, 'pull_request/all_pass/tree.json')
-    elsif params[:sha] == 'bad-sha'
-      json_response(200, 'pull_request/all_fail/tree.json')
-    elsif params[:sha] == 'pending-sha'
-      json_response(200, 'pull_request/all_pending/tree.json')
-    end
+  post '/repos/:owner/:repo/statuses/:ref' do
   end
 
   private
